@@ -1,0 +1,12 @@
+#!/bin/env sh
+
+export HOME=/home/build
+export BUNDLE_PATH=/home/build/src/vendor/bundle
+export PATH=$PATH:$HOME/npm/bin:$HOME/.gem/ruby/2.1.0/bin
+
+set -e
+if [ -a Gemfile ]; then echo ">>> Installing Bundler Dependencies"; bundle install --path /home/build/src/vendor/bundle; fi
+if [ -a package.json ]; then echo ">>> Installing NPM Dependencies"; npm install; fi
+if [ -a bower.json ]; then echo ">>> Installing Bower Dependencies"; bower install; fi
+echo ">>> Running Build Command '$PIPELINE_BUILD_COMMAND'"
+eval $PIPELINE_BUILD_COMMAND

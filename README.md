@@ -22,3 +22,10 @@ directory.
   }
 }
 ```
+
+## ruby
+
+A Ruby container with Jekyll and Middleman already installed. Will install Gemfile,
+NPM, and Bower dependencies if the relevant files are detected.
+
+By default, runs `bundle exec rake` to build your site.
