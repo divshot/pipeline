@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+chown -R build:build /home/build/scripts
+sudo -E -u build /home/build/scripts/link-cache
+sudo -E -u build /home/build/scripts/build

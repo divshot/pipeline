@@ -19,4 +19,4 @@ ADD ./scripts /home/build/scripts
 
 USER root
 WORKDIR /home/build/src
-CMD ["bash","/home/build/scripts/run.sh"]
+CMD ["/home/build/scripts/run"]

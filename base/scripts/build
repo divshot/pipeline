@@ -1,4 +1,4 @@
-#!/bin/env sh
+#!/usr/bin/env bash
 
 export HOME=/home/build
 export BUNDLE_PATH=/home/build/src/vendor/bundle
