@@ -1,31 +1,29 @@
-# Divshot Pipeline Containers
+# Divshot Pipeline
 
-Build your front-end apps and static sites with the power of Docker.
+These public Docker images power the Divshot Pipeline build servers in conjunction
+with [Buildkite](https://buildkite.com). The `divshot/pipeline-agent` image runs
+to coordinate with the Buildkite service and spawns `divshot/pipeline-build`
+containers to perform the actual build process.
 
-**Note:** These buildpacks are designed to be run by a build server. They can
-and will mess with file permissions of volumes mounted into them.
+## Building
 
-## node
+To build the images locally, just run:
 
-A Node.js build container with Bower, Grunt, Gulp, Broccoli, and Ember CLI already
-installed. Additional dependencies will be installed with `npm install` and
-`bower install`.
+    make all
+    
+## Running
 
-You must have a `build` script in your `package.json` file that performs the
-necessary build, and the build must be in a subtree of your project's working
-directory.
+To run the agent, you'll first need to create a container with a shared data
+volume so that both the agent and the build container can access it. After you
+build the images using `make all`, you should start a container named `divshot-pipeline-data`
+like so:
 
-```json
-{
-  "scripts": {
-    "build": "grunt build:dist"
-  }
-}
-```
+    docker run --name divshot-pipeline-data -v /builds divshot/pipeline-agent echo "Build Data"
+    
+Next, we'll need to start the Buildkite agent. We can do this like so:
 
-## ruby
-
-A Ruby container with Jekyll and Middleman already installed. Will install Gemfile,
-NPM, and Bower dependencies if the relevant files are detected.
-
-By default, runs `bundle exec rake` to build your site.
+    docker run -e BUILDKITE_AGENT_TOKEN=xxx --volumes-from divshot-pipeline-data -v /var/run/docker.sock divshot/pipeline-agent
+    
+Where the `xxx` of `BUILDKITE_AGENT_TOKEN` is the actual agent token. Once the
+agent is running, it will automatically register itself with Buildkite and be
+available to start processing jobs.

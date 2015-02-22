@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker run -v $(pwd):/home/build/src divshot/pipeline-build
+docker run -e BUILDKITE_BUILD_FOLDER_NAME=$BUILDKITE_BUILD_FOLDER_NAME --volumes-from divshot-pipeline-data divshot/pipeline-build
