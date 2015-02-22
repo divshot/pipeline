@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -e
+chown -R build:build /home/build/scripts
+# detect and export environment variables for this build
+detected_env=$(sudo -E -u build /home/build/scripts/detect)
+eval "export $detected_env"
+printenv
+echo "Detected $DIVSHOT_BUILD_TYPE app"
+sudo -E -u build /home/build/scripts/restore
+sudo -E -u build /home/build/scripts/build

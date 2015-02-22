@@ -1,0 +1,63 @@
+#!/usr/bin/env ruby
+
+PIPELINES = {
+  'ruby' => 'bundle exec rake',
+  'jekyll' => 'bundle exec jekyll build',
+  'middleman' => 'bundle exec middleman build',
+
+  'node' => 'npm run build',
+  'gulp' => 'gulp',
+  'grunt' => 'grunt'
+}
+
+require 'json'
+
+def error!(msg)
+  STDERR.puts "[ERROR] #{msg}"
+  exit 1
+end
+
+def detect_files(*files)
+  files.each{|f| return false unless File.exist?(f)}
+  true
+end
+
+def detect_pipeline
+  return 'jekyll' if detect_files('Gemfile','_config.yml')
+  return 'ruby' if detect_files('Gemfile','Rakefile')
+  return 'middleman' if detect_files('Gemfile','config.rb')
+  return 'gulp' if detect_files('package.json','gulpfile.js')
+  return 'grunt' if detect_files('package.json','gruntfile.js')
+  return 'node' if detect_files('package.json')
+  nil
+end
+
+def detect_cache_dirs
+  out = []
+  out << 'node_modules' if detect_files('package.json')
+  out << 'vendor/bundle' if detect_files('Gemfile')
+  if detect_files('bower.json')
+    bowerrc = JSON.parse(File.read('.bowerrc')) rescue {}
+    out << bowerrc["directory"] || 'bower_components'
+  end
+  out
+end
+
+begin
+  error! "Project must have divshot.json in root directory." unless File.exist?('divshot.json')
+  config = JSON.parse(File.read('divshot.json'))
+
+  build_type = detect_pipeline unless PIPELINES.keys.include?(config['build'])
+  cache_dirs = detect_cache_dirs
+
+  error! "Could not detect app type from file structure and no \"build\" key present in configuration." unless build_type
+
+  print "DIVSHOT_BUILD_TYPE=#{build_type} DIVSHOT_BUILD_COMMAND=\"#{PIPELINES[build_type]}\" DIVSHOT_CACHE_DIRS=\"#{cache_dirs.join(';')}\""
+  exit 0
+rescue StandardError => e
+  if ENV['DEBUG']
+   raise e
+  else
+    error! "Unknown error occurred while building. Please contact support"
+  end
+end
