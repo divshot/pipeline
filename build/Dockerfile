@@ -12,8 +12,9 @@ USER build
 ENV HOME /home/build
 
 RUN npm config set prefix ~/npm &&\
-    npm install -g bower jspm component browserify grunt-cli gulp broccoli-cli ember-cli harp &&\
+    npm install -g bower jspm component browserify grunt-cli gulp broccoli-cli ember-cli harp divshot-cli &&\
     gem install --user-install bundler middleman jekyll
+ENV PATH /home/build/npm/bin:$PATH
 
 ADD ./scripts /home/build/scripts
 

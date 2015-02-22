@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+echo "--- Caching Dependencies"
+eval "tar -czf /cache/$DIVSHOT_APP.$BUILDKITE_BRANCH.tar.gz .divshot-cache $DIVSHOT_CACHE_DIRS"
+echo "Cached folders: $DIVSHOT_CACHE_DIRS"

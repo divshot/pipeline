@@ -52,7 +52,7 @@ begin
 
   error! "Could not detect app type from file structure and no \"build\" key present in configuration." unless build_type
 
-  print "DIVSHOT_BUILD_TYPE=#{build_type} DIVSHOT_BUILD_COMMAND=\"#{PIPELINES[build_type]}\" DIVSHOT_CACHE_DIRS=\"#{cache_dirs.join(';')}\""
+  print "DIVSHOT_BUILD_TYPE=#{build_type} DIVSHOT_BUILD_COMMAND=\"#{PIPELINES[build_type]}\" DIVSHOT_CACHE_DIRS=\"#{cache_dirs.join(' ')}\""
   exit 0
 rescue StandardError => e
   if ENV['DEBUG']

@@ -3,6 +3,9 @@
 set -e
 chown -R build:build /home/build/scripts
 chown -R build:build /builds/$BUILDKITE_BUILD_FOLDER_NAME/
+chown build:build /cache
+cache_file=/cache/$DIVSHOT_APP.$BUILDKITE_BRANCH.tar.gz
+if [ -f $cache_file ]; then chown build:build $cache_file; fi
 
 rm -rf /home/build/src
 ln -s /builds/$BUILDKITE_BUILD_FOLDER_NAME/ /home/build/src
@@ -13,5 +16,7 @@ cd /home/build/src
 detected_env=$(sudo -E -u build /home/build/scripts/detect)
 eval "export $detected_env"
 echo "Detected $DIVSHOT_BUILD_TYPE app"
-# sudo -E -u build /home/build/scripts/restore
+sudo -E -u build /home/build/scripts/restore
 sudo -E -u build /home/build/scripts/build
+sudo -E -u build /home/build/scripts/deploy
+sudo -E -u build /home/build/scripts/cache

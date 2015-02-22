@@ -19,7 +19,7 @@ volume so that both the agent and the build container can access it. After you
 build the images using `make all`, you should start a container named `divshot-pipeline-data`
 like so:
 
-    docker run --name divshot-pipeline-data -v /builds divshot/pipeline-agent echo "Build Data"
+    docker run --name divshot-pipeline-data -v /builds -v /cache divshot/pipeline-agent echo "Build Data"
 
 Next, we'll need to start the Buildkite agent. We can do this like so:
 

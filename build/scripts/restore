@@ -1,11 +1,10 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env bash
 
-puts "--- Restoring Cached Dependencies"
-if ENV['DIVSHOT_CACHE_DIRS'] && ENV['DIVSHOT_CACHE_DIRS'].length > 0
-  ENV['DIVSHOT_CACHE_DIRS'].split(";").each do |cache_dir|
-    puts "Mounting cached dependencies to #{cache_dir}"
-    system("ln -s /home/build/cache/#{cache_dir} /home/build/src/#{cache_dir}")
-  end
+cached_deps="/cache/$DIVSHOT_APP.$BUILDKITE_BRANCH.tar.gz"
+echo "--- Restoring Cached Dependencies"
+if [ -f $cached_deps ]; then
+  tar -xzf $cached_deps;
+  echo "Dependencies restored."
 else
-  puts "No cacheable dependencies, proceeding to build."
-end
+  echo "No cached dependencies found."
+fi

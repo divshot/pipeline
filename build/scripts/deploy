@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
-echo $BUILDKITE_BUILD_FOLDER_NAME
+deploy_env=${DIVSHOT_ENV:-development}
+echo "--- Deploying to $deploy_env"
 /home/build/npm/bin/divshot push ${DIVSHOT_ENV:-development} --app $DIVSHOT_APP --token $DIVSHOT_TOKEN
