@@ -2,8 +2,12 @@
 
 set -e
 chown -R build:build /home/build/scripts
-cp -r /builds/$BUILDKITE_BUILD_FOLDER_NAME/. /home/build/src
-chown -R build:build /home/build/src
+chown -R build:build /builds/$BUILDKITE_BUILD_FOLDER_NAME/
+
+rm -rf /home/build/src
+ln -s /builds/$BUILDKITE_BUILD_FOLDER_NAME/ /home/build/src
+
+cd /home/build/src
 
 # detect and export environment variables for this build
 detected_env=$(sudo -E -u build /home/build/scripts/detect)
