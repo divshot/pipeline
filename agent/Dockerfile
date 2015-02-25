@@ -21,4 +21,4 @@ ENV BUILDKITE_USER="root" \
 ADD bootstrap.sh /etc/buildkite-agent/bootstrap.sh
 ADD ./hooks /etc/buildkite-agent/hooks
 
-CMD buildkite-agent start
+CMD ["buildkite-agent", "start"]
