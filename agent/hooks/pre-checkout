@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+echo 'Configuring git https to use $GITHUB_TOKEN...'
+export GIT_ASKPASS=/etc/buildkite-agent/hooks/ask-pass
